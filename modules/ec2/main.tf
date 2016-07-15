@@ -2,6 +2,7 @@ variable "api_key" {}
 variable "access_key_id" {}
 variable "access_key_secret" {}
 variable "region" {}
+variable "user_data" {}
 
 variable "amis" {
   default = {
@@ -22,16 +23,17 @@ resource "template_file" "userdata" {
   vars {
     access_key = "${var.access_key_id}"
     secret_key = "${var.access_key_secret}"
-    api_key= "${var.api_key}"
+    api_key = "${var.api_key}"
+    user_data = "${var.user_data}"
   }
 }
 
 resource "aws_instance" "web" {
-    ami = "${lookup(var.amis, var.region)}"
-    instance_type = "t2.micro"
-    associate_public_ip_address=true
-    tags {
-      Name = "WebPageTestHost"
-    }
-    user_data = "${template_file.userdata.rendered}"
+  ami = "${lookup(var.amis, var.region)}"
+  instance_type = "t2.micro"
+  associate_public_ip_address=true
+  tags {
+    Name = "WebPagetest_host"
+  }
+  user_data = "${template_file.userdata.rendered}"
 }

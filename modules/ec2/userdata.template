@@ -1,7 +1,4 @@
 ec2_key=${access_key}
 ec2_secret=${secret_key}
-headless=0
 api_key=${api_key}
-iq=80
-pngss=1
-publishTo=null
+${user_data}

@@ -13,6 +13,7 @@ This project is made up of some uber simple [Terraform](https://www.terraform.io
 * picks the correct [AMI](https://github.com/WPO-Foundation/webpagetest/blob/master/docs/EC2/Server%20AMI.md) based on your chosen region
 * [creates an IAM user](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html) bound with an [appropriate policy](http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html) for the required operations.
 * adds the specified [instance configuration](https://github.com/redbadger/webpagetest-terraform-aws/blob/master/modules/ec2/userdata.template) as [user data](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html).
+The `ec2_key`, `ec2_secret` and `api_key` values are automatically included, allowing the instance to autonomously start and stop test agents, as well as providing a secured REST endpoint.
 
 ## Usage
 
@@ -23,18 +24,21 @@ The following variables are understood:
   * `secret_access_key` - The secret access key of the above user.
   * `webpagetest_api_key` *default*: `sad43432reHH434dsad` - An API key used when authenticating against [WebPagetests REST API](https://sites.google.com/a/webpagetest.org/docs/advanced-features/webpagetest-restful-apis).
   * `region` *default*: `eu-west-1` - The [AWS region](http://docs.aws.amazon.com/general/latest/gr/rande.html) you want to create your WebPagetest instance in.
+  * `user_data` - The instance settings as per [`settings.ini`](https://github.com/WPO-Foundation/webpagetest/blob/master/www/settings/settings.ini.sample). For example
 
 ### Basic Usage
 
 The following steps will install a fully functioning WebPagetest instance (with an auto-assigned Public IP), so you'll be up and running in seconds.
 
+1. Create a [variable file](https://www.terraform.io/docs/configuration/variables.html#variable-files), and add the necessary key value pairs. An example file might look like:
 ```
-terraform get && terraform apply \
-  -var access_key_id=YOUR_ACCESS_KEY_ID \
-  -var secret_access_key=YOUR_SECRET_ACCESS_KEY
-  -var webpagetest_api_key=SOME_KEY
-  -var region=eu-west-1
+access_key_id="43534123123431312"
+secret_access_key="w34324231lk21321"
+user_data=<<EOF
+headless=1
+EOF
 ```
+2. Run `./run.sh apply PATH_TO_VAR_FILE`
 
 #### Warning
 
