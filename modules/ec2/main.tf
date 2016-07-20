@@ -32,6 +32,7 @@ resource "aws_instance" "web" {
   ami = "${lookup(var.amis, var.region)}"
   instance_type = "t2.micro"
   associate_public_ip_address=true
+  key_name="webpagetest"
   tags {
     Name = "WebPagetest_host"
   }

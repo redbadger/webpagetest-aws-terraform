@@ -14,6 +14,9 @@ This project is made up of some uber simple [Terraform](https://www.terraform.io
 * [creates an IAM user](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html) bound with an [appropriate policy](http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html) for the required operations.
 * adds the specified [instance configuration](https://github.com/redbadger/webpagetest-terraform-aws/blob/master/modules/ec2/userdata.template) as [user data](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html).
 The `ec2_key`, `ec2_secret` and `api_key` values are automatically included, allowing the instance to autonomously start and stop test agents, as well as providing a secured REST endpoint.
+* Imports an existing SSH key pair and binds it against the created EC2 instance.
+
+If you want to see the setup in more detail, run `terraform get && terraform plan`.
 
 ## Usage
 
@@ -24,7 +27,8 @@ The following variables are understood:
   * `secret_access_key` - The secret access key of the above user.
   * `webpagetest_api_key` *default*: `sad43432reHH434dsad` - An API key used when authenticating against [WebPagetests REST API](https://sites.google.com/a/webpagetest.org/docs/advanced-features/webpagetest-restful-apis).
   * `region` *default*: `eu-west-1` - The [AWS region](http://docs.aws.amazon.com/general/latest/gr/rande.html) you want to create your WebPagetest instance in.
-  * `user_data` - The instance settings as per [`settings.ini`](https://github.com/WPO-Foundation/webpagetest/blob/master/www/settings/settings.ini.sample). For example
+  * `user_data` - The instance settings as per [`settings.ini`](https://github.com/WPO-Foundation/webpagetest/blob/master/www/settings/settings.ini.sample).
+  * `public_key_path` - The path to the public key
 
 ### Basic Usage
 
@@ -34,6 +38,7 @@ The following steps will install a fully functioning WebPagetest instance (with 
 ```
 access_key_id="43534123123431312"
 secret_access_key="w34324231lk21321"
+public_key_path="~/.ssh/webpagetest_rsa"
 user_data=<<EOF
 headless=1
 EOF
